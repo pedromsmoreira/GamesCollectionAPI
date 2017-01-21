@@ -45,8 +45,10 @@ class HeroRouter {
      * endpoints.
      */
     init() {
-        this.router.get('/', this.getAll);
-        this.router.get('/:id', this.getOne);
+        this.router.route('/')
+            .get(this.getAll);
+        this.router.route('/:id')
+            .get(this.getOne);
     }
 }
 exports.HeroRouter = HeroRouter;
