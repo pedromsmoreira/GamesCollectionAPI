@@ -3,12 +3,6 @@ import * as debug from 'debug';
 
 import App from './App';
 
-import mongoose = require('mongoose');
-
-mongoose.connect('mongodb://localhost:27017/local');
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error: '));
-
 debug('ts-express:server');
 
 const port = normalizePort(process.env.PORT || 3000);

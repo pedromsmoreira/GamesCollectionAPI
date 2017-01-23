@@ -1,5 +1,4 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import * as mongoose from 'mongoose';
 import Hero = require('../models/Hero');
 
 // const Heroes = require('../data');
@@ -19,8 +18,16 @@ export class HeroRouter {
      * GET all Heroes
      */
     public getAll(req: Request, res: Response, next: NextFunction){
-        var heroes = Hero.find();
-        res.send(heroes);
+        var response = {};
+        let heroes = Hero.find({}, function(err, data){
+            if(err){
+                response = {"error" : true,"message" : "Error fetching data"};
+            } else {
+                response = {"error" : false,"message" : data};
+            }
+            res.json(response);
+        });
+        // res.send(heroes);
         // res.send(Heroes);
     }
 
@@ -51,46 +58,21 @@ export class HeroRouter {
      * Creates a new Hero
      */
     public postHero(req: Request, res: Response, next: NextFunction){
-        let newHero = new Hero(req.body);
+        var db = new Hero();
+        var response = {};
 
-        let heroExists = Heroes.find(hero => hero.name === newHero.name);
+        db.id = req.body.id;
+        db.name = req.body.name;
+        db.powers = req.body.powers;
 
-        if(heroExists) {
-            // res.status(409)
-            //     .send({
-            //     status: 409,
-            //     message: "Conflict! Hero already exists!" 
-            //     });
-            res.status(409)
-                .json({
-                    message: "Conflict! Hero already exists!"
-                });               
-        }
-        else{
-            newHero.save((err, hero) => {
-                if(err){
-                    res.status(500)
-                        .send({
-                            status: 500,
-                            message: err
-                            });
-                    // res.json({
-                    //     message: err
-                    // });
-                }
-                else{
-                    // res.status(204)
-                    //     .send({
-                    //         status: 204,
-                    //         message: "Hero successfully added!",
-                    //         body: hero });
-                    res.json({
-                        message: "Hero successfully added!",
-                        body: hero
-                    });
-                }
-            }); 
-        }
+        db.save(function(err){
+            if(err){
+                response = { "error" : true,"message" : err };
+            }else{
+                response = { "error": false, "message": "Data added" };
+            }
+            res.json(response);
+        });
     }
 
     /**

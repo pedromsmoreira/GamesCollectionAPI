@@ -2,10 +2,6 @@
 const http = require("http");
 const debug = require("debug");
 const App_1 = require("./App");
-const mongoose = require("mongoose");
-mongoose.connect('mongodb://localhost:27017/local');
-let db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error: '));
 debug('ts-express:server');
 const port = normalizePort(process.env.PORT || 3000);
 App_1.default.set('port', port);

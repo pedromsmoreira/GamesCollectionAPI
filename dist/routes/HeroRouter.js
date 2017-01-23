@@ -14,8 +14,17 @@ class HeroRouter {
      * GET all Heroes
      */
     getAll(req, res, next) {
-        var heroes = Hero.find();
-        res.send(heroes);
+        var response = {};
+        let heroes = Hero.find({}, function (err, data) {
+            if (err) {
+                response = { "error": true, "message": "Error fetching data" };
+            }
+            else {
+                response = { "error": false, "message": data };
+            }
+            res.json(response);
+        });
+        // res.send(heroes);
         // res.send(Heroes);
     }
     /**
@@ -45,41 +54,20 @@ class HeroRouter {
      * Creates a new Hero
      */
     postHero(req, res, next) {
-        let newHero = new Hero(req.body);
-        let heroExists = Heroes.find(hero => hero.name === newHero.name);
-        if (heroExists) {
-            // res.status(409)
-            //     .send({
-            //     status: 409,
-            //     message: "Conflict! Hero already exists!" 
-            //     });
-            res.status(409)
-                .json({
-                message: "Conflict! Hero already exists!"
-            });
-        }
-        else {
-            newHero.save((err, hero) => {
-                if (err) {
-                    res.status(500)
-                        .send({
-                        status: 500,
-                        message: err
-                    });
-                }
-                else {
-                    // res.status(204)
-                    //     .send({
-                    //         status: 204,
-                    //         message: "Hero successfully added!",
-                    //         body: hero });
-                    res.json({
-                        message: "Hero successfully added!",
-                        body: hero
-                    });
-                }
-            });
-        }
+        var db = new Hero();
+        var response = {};
+        db.id = req.body.id;
+        db.name = req.body.name;
+        db.powers = req.body.powers;
+        db.save(function (err) {
+            if (err) {
+                response = { "error": true, "message": err };
+            }
+            else {
+                response = { "error": false, "message": "Data added" };
+            }
+            res.json(response);
+        });
     }
     /**
      * Taker each handler and attach to one of the Express.Router's

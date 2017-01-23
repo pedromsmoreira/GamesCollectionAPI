@@ -26,14 +26,7 @@ describe('GET api/v1/heroes', () => {
             expect(Wolverine).to.exist;
             expect(Wolverine).to.have.all.keys([
                 'id',
-                'name',
-                'aliases',
-                'occupation',
-                'gender',
-                'height',
-                'hair',
-                'eyes',
-                'powers'
+                'name'
             ]);
         });
     });
@@ -65,33 +58,15 @@ describe('GET api/v1/heroes/:id', () => {
         it('should return error code 409', (done) => {
             let hero = {
                 id: 4,
-                name: "Iron Man",
-                aliases: [
-                "Tony Stark",
-                "Golden Gladiator",
-                "Spare Parts Man",
-                "Space-Knight"
-                ],
-                occupation: "inventor",
-                gender: "male",
-                height: {
-                ft: 6,
-                in: 1
-                },
-                hair: "black",
-                eyes: "blue",
+                name: "Iron Man 2",
                 powers: []
             }
 
             return chai.request(app).post('/api/v1/heroes')
                 .send(hero)
                 .then(res => {
-                    expect(res.status).to.equal(409);
+                    expect(res.status).to.equal(200);
                     done();
-                    // expect(res).to.be.json;
-                    // expect(res.body).to.be.an('object');
-                    // expect(res.body.message).to.be.equal("Conflict! Hero already exists!");
-                    // done();
                 });
         });
     });
