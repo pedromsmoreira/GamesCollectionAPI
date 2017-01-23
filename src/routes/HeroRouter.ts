@@ -2,7 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import * as mongoose from 'mongoose';
 import Hero = require('../models/Hero');
 
-const Heroes = require('../data');
+// const Heroes = require('../data');
 
 export class HeroRouter {
     router: Router
@@ -19,7 +19,9 @@ export class HeroRouter {
      * GET all Heroes
      */
     public getAll(req: Request, res: Response, next: NextFunction){
-        res.send(Heroes);
+        var heroes = Hero.find();
+        res.send(heroes);
+        // res.send(Heroes);
     }
 
     /**
@@ -27,7 +29,8 @@ export class HeroRouter {
      */
     public getOne(req: Request, res: Response, next: NextFunction){
         let query = parseInt(req.params.id);
-        let hero = Heroes.find(hero => hero.id === query);
+        let hero = Hero.find(hero => hero.id === query);
+        // let hero = Heroes.find(hero => hero.id === query);
         if(hero){
             res.status(200)
                 .send({

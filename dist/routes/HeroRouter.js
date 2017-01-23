@@ -1,7 +1,7 @@
 "use strict";
 const express_1 = require("express");
 const Hero = require("../models/Hero");
-const Heroes = require('../data');
+// const Heroes = require('../data');
 class HeroRouter {
     /**
      * Initialize the HeroRouter
@@ -14,14 +14,17 @@ class HeroRouter {
      * GET all Heroes
      */
     getAll(req, res, next) {
-        res.send(Heroes);
+        var heroes = Hero.find();
+        res.send(heroes);
+        // res.send(Heroes);
     }
     /**
      * GET one hero by id
      */
     getOne(req, res, next) {
         let query = parseInt(req.params.id);
-        let hero = Heroes.find(hero => hero.id === query);
+        let hero = Hero.find(hero => hero.id === query);
+        // let hero = Heroes.find(hero => hero.id === query);
         if (hero) {
             res.status(200)
                 .send({

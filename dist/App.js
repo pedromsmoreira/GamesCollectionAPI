@@ -2,17 +2,11 @@
 const express = require("express");
 const logger = require("morgan");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const HeroRouter_1 = require("./routes/HeroRouter");
 // Creates and configures an ExpressJS web server
 class App {
     // Run configuration methods on the Express instance
     constructor() {
-        //db options
-        this.options = {
-            server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
-            replset: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } }
-        };
         this.express = express();
         this.middleware();
         this.routes();
@@ -28,9 +22,6 @@ class App {
         /* This is just to get up and running, and to make sure what we've got is
         * working so far. This function will change when we start to add more
         * API endpoints */
-        mongoose.connect('mongodb://localhost:27017/gamesdb', this.options);
-        let db = mongoose.connection;
-        db.on('error', console.error.bind(console, 'connection error: '));
         let router = express.Router();
         // placeholder route handler
         router.get('/', (req, res, next) => {
