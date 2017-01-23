@@ -1,8 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import Hero = require('../models/Hero');
 
-// const Heroes = require('../data');
-
 export class HeroRouter {
     router: Router
 
@@ -23,47 +21,34 @@ export class HeroRouter {
             if(err){
                 response = {"error" : true,"message" : "Error fetching data"};
             } else {
-                response = {"error" : false,"message" : data};
+                response = { "error" : false,"message" : data};
             }
-            res.json(response);
+            res.status(200).send(response);
         });
-        // res.send(heroes);
-        // res.send(Heroes);
     }
 
     /**
      * GET one hero by id
      */
     public getOne(req: Request, res: Response, next: NextFunction){
-        let query = parseInt(req.params.id);
-        let hero = Hero.find(hero => hero.id === query);
-        // let hero = Heroes.find(hero => hero.id === query);
-        if(hero){
-            res.status(200)
-                .send({
-                    message: 'Success',
-                    status: res.status,
-                    hero
-                });
-        }else{
-            res.status(400)
-                .send({
-                    message: 'No hero found with the given id.',
-                    status: res.status
-                });
-        }
+        let response = {};
+
+        Hero.find({ id: parseInt(req.params.id) }, function(err, data){
+            if(data){
+                response = { "error" : false, "message" : data };
+            }else{
+                response = { "error": true, "message": "No hero found with the given id."};                
+            }
+            res.json(response);
+        });
     }
 
     /**
      * Creates a new Hero
      */
     public postHero(req: Request, res: Response, next: NextFunction){
-        var db = new Hero();
+        var db = new Hero(req.body);
         var response = {};
-
-        db.id = req.body.id;
-        db.name = req.body.name;
-        db.powers = req.body.powers;
 
         db.save(function(err){
             if(err){
