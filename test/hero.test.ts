@@ -1,6 +1,7 @@
 import * as mocha from 'mocha';
 import * as chai from 'chai';
 import chaiHttp = require('chai-http');
+import Hero = require('../src/models/Hero');
 
 import app from '../src/App';
 
@@ -56,5 +57,40 @@ describe('GET api/v1/heroes/:id', () => {
             expect(res.body.hero.name).to.equal('Luke Cage');
         });
     });
-    
+
 });
+
+    describe('POST api/v1/heroes', () => {
+
+        it('should return error code 409', (done) => {
+            let hero = {
+                id: 4,
+                name: "Iron Man",
+                aliases: [
+                "Tony Stark",
+                "Golden Gladiator",
+                "Spare Parts Man",
+                "Space-Knight"
+                ],
+                occupation: "inventor",
+                gender: "male",
+                height: {
+                ft: 6,
+                in: 1
+                },
+                hair: "black",
+                eyes: "blue",
+                powers: []
+            }
+
+            return chai.request(app).post('/api/v1/heroes')
+                .send(hero)
+                .then(res => {
+                    expect(res.status).to.equal(409);
+                    expect(res).to.be.json;
+                    expect(res.body).to.be.an('object');
+                    expect(res.body.message).to.be.equal("Conflict! Hero already exists!");
+                    done();
+                });
+        });
+    });
