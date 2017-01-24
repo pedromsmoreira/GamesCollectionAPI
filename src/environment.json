@@ -1,0 +1,10 @@
+{
+    "development": {
+        "MONGO_URI": "mongodb://localhost:27017/local",
+        "MONGO_OPTIONS": { "db": { "safe": true } }
+    },
+    "test": {
+        "MONGO_URI": "mongodb://localhost:27017/test",
+        "MONGO_OPTIONS": { "db": { "safe": true } }
+    }
+}

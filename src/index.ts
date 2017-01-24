@@ -1,9 +1,22 @@
 import * as http from 'http';
 import * as debug from 'debug';
+import * as mongoose from 'mongoose';
 
 import App from './App';
 
+import config = require('./config');
+
 debug('ts-express:server');
+
+// *** mongoose *** ///
+mongoose.connect(config.mongoURI[App.settings.env], function(err, res) {
+  if(err) {
+    console.log('Error connecting to the database. ' + err);
+  } else {
+    console.log('Connected to Database: ' + config.mongoURI[App.settings.env]);
+  }
+});
+
 
 const port = normalizePort(process.env.PORT || 3000);
 App.set('port', port);

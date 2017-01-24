@@ -1,5 +1,6 @@
 import mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/local');
+
+// mongoose.connect('mongodb://localhost:27017/local');
 
 import IHero = require('./IHero');
 

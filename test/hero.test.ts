@@ -16,7 +16,7 @@ describe('GET api/v1/heroes', () => {
             expect(res.status).to.equal(200);
             expect(res).to.be.json;
             expect(res.body.message).to.be.an('array');
-            expect(res.body.message).to.have.length(7);
+            expect(res.body.message).to.have.length(6);
             });
     });
 
@@ -65,19 +65,21 @@ describe('GET api/v1/heroes/:id', () => {
 
     describe('POST api/v1/heroes', () => {
 
-        it('should return error code 200', (done) => {
-            let hero = {
+        it('should return error code 200', function(done) {
+            var hero = new Hero ({
                 id: 7,
                 name: "Iron Man 2",
                 powers: []
-            }
+            });
 
-            return chai.request(app).post('/api/v1/heroes')
-                .send(hero)
-                .end(res => {
+            chai.request(app)
+                .post('/api/v1/heroes')
+                .send({ id: 7, name: "Iron Man 2", powers: [] })
+                .then(res => {
                     expect(res.status).to.equal(200);
-                    expect(res.body.message).to.be.an('object');
+                    expect(res).to.be.json;
+                    expect(res.body).to.have.property("message");
                     done();
-                });
+                    });
         });
     });

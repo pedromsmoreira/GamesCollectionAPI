@@ -1,8 +1,19 @@
 "use strict";
 const http = require("http");
 const debug = require("debug");
+const mongoose = require("mongoose");
 const App_1 = require("./App");
+const config = require("./config");
 debug('ts-express:server');
+// *** mongoose *** ///
+mongoose.connect(config.mongoURI[App_1.default.settings.env], function (err, res) {
+    if (err) {
+        console.log('Error connecting to the database. ' + err);
+    }
+    else {
+        console.log('Connected to Database: ' + config.mongoURI[App_1.default.settings.env]);
+    }
+});
 const port = normalizePort(process.env.PORT || 3000);
 App_1.default.set('port', port);
 const server = http.createServer(App_1.default);
